@@ -124,7 +124,7 @@ def L(matrix):  # A function that accepts a matrix and returns the matrix L by c
     l = create_I(matrix)  # unit matrix
     for col in range(len(matrix) - 1):
         elementary = e_matrix(temp, col)  # send to func to creat elementary matrix
-        m = inverse(elementary)  # create inverse elementary matrix
+        m=inverse(elementary) #create inverse elementary matrix
         for row in range(col + 1, len(matrix)):
             l[row][col] = m[row][col]
         elementary = matrix_multiply(e_matrix(temp, col), temp)  # make elementary matrix and then mul with other matrix
@@ -135,19 +135,49 @@ def L(matrix):  # A function that accepts a matrix and returns the matrix L by c
 def LU(matrix):  # A function that receives a matrix and returns the product between U and L.
     return matrix_multiply(L(matrix), U(matrix))  # send to mul func
 
+def change_rows(matrix):
+    for col in range(getlen(matrix)-1):
+        max=abs(matrix[col][col])
+        for row in range(col+1,getlen(matrix)):
+            if abs(matrix[row][col])>max:
+                temp=matrix[col]
+                matrix[col]=matrix[row]
+                matrix[row]=temp
+    return matrix
+
+def geus(a, b):
+    A=change_rows(a)
+    x = matrix_multiply(inverse(A), b)
+    print("matrix x: ")
+    print(x)
+
+def piruk_LU(a,b):
+    A = change_rows(a)
+    print("matrix L: ")
+    print(L(a))
+    print("matrix U: ")
+    print(U(a))
+    y = matrix_multiply(inverse(L(a)), b)
+    x = matrix_multiply(inverse(U(a)), y)
+    print("matrix x: ")
+    print(x)
+
 
 def main():
-
-    A = [[1, -1, -2, 3], [2, -3, -5, 6], [-1, 3, 5, 6], [1, -1, 5, 9]]
-    b = [[13], [19], [78], [96]]
+    A=[[4,5,-6],[2,5,2],[1,3,2]]
+    b=[[1],[2],[1]]
 
     if is_regular(A):
-        x = matrix_multiply(inverse(A), b)
-        print(x)
+        print("A is a regular matrix")
+        print(geus(A,b))
+
     else:
-        y = matrix_multiply(inverse(L(A)), b)
-        x = matrix_multiply(inverse(U(A)), y)
-        print(x)
+        print("A isn't a regular matrix")
+        piruk_LU(A,b)
 
 main()
+print('------------------------------------------')
+mat=[[4,5,-6],[2,5,2],[1,3,2]]
+print(is_regular(mat))
+
 
