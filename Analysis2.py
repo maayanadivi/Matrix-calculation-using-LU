@@ -135,7 +135,7 @@ def L(matrix):  # A function that accepts a matrix and returns the matrix L by c
 def LU(matrix):  # A function that receives a matrix and returns the product between U and L.
     return matrix_multiply(L(matrix), U(matrix))  # send to mul func
 
-def change_rows(matrix):
+def change_rowsA(matrix):
     for col in range(getlen(matrix)-1):
         max=abs(matrix[col][col])
         for row in range(col+1,getlen(matrix)):
@@ -145,14 +145,26 @@ def change_rows(matrix):
                 matrix[row]=temp
     return matrix
 
+
+def change_rowsb(A,b):
+    for col in range(getlen(A)-1):
+        max=abs(A[col][col])
+        for row in range(col+1,getlen(A)):
+            if abs(A[row][col])>max:
+                tempA = A[col]
+                tempb=b[col]
+                A[col] = A[row]
+                b[col]=b[row]
+                A[row] = tempA
+                b[row]=tempb
+    return b
+
 def geus(a, b):
-    A=change_rows(a)
-    x = matrix_multiply(inverse(A), b)
+    x = matrix_multiply(inverse(a), b)
     print("matrix x: ")
     print(x)
 
 def piruk_LU(a,b):
-    A = change_rows(a)
     print("matrix L: ")
     print(L(a))
     print("matrix U: ")
@@ -164,20 +176,25 @@ def piruk_LU(a,b):
 
 
 def main():
-    A=[[4,5,-6],[2,5,2],[1,3,2]]
-    b=[[1],[2],[1]]
+    A=[[1,0,1,0],[1,1,2,2],[1,2,4,8],[1,3,8,24]] # Dear Eden put values here
+    b=[[1],[2],[11],[52]]                        # and here
+
+    b = change_rowsb(A, b) #change rows in b first by A
+    A = change_rowsA(A) #change rows in A
 
     if is_regular(A):
         print("A is a regular matrix")
-        print(geus(A,b))
+        geus(A,b)
 
     else:
         print("A isn't a regular matrix")
         piruk_LU(A,b)
 
 main()
-print('------------------------------------------')
-mat=[[4,5,-6],[2,5,2],[1,3,2]]
-print(is_regular(mat))
+
+
+
+
+
 
 
